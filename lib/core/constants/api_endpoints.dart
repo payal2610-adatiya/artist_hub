@@ -1,5 +1,7 @@
 class ApiEndpoints {
   static const baseUrl = 'https://prakrutitech.xyz/gaurang/';
+  static const String mediaBaseUrl = '$baseUrl/uploads/'; // For media files
+
 
   // Auth
   static const login = 'login.php';
