@@ -1,13 +1,13 @@
-// lib/core/services/like_service.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class LikeService {
   static const String _baseUrl = 'https://prakrutitech.xyz/gaurang/';
 
+  // Toggle Like
   static Future<Map<String, dynamic>> toggleLike(int userId, int mediaId) async {
     try {
-      print('Toggling like: userId=$userId, mediaId=$mediaId');
+      print('Toggle Like - userId: $userId, mediaId: $mediaId');
 
       final response = await http.post(
         Uri.parse('$_baseUrl/like.php'),
@@ -17,19 +17,17 @@ class LikeService {
         },
       );
 
-      print('Like response: ${response.statusCode} - ${response.body}');
+      print('Like Response: ${response.statusCode} - ${response.body}');
 
       if (response.statusCode == 200) {
-        final decoded = json.decode(response.body);
-        print('Decoded response: $decoded');
-        return decoded;
+        return json.decode(response.body);
       }
       return {
         'status': false,
         'message': 'Server error: ${response.statusCode}',
       };
     } catch (e) {
-      print('Like error: $e');
+      print('Like Error: $e');
       return {
         'status': false,
         'message': 'Network error: $e',
@@ -37,13 +35,14 @@ class LikeService {
     }
   }
 
+  // Add Comment
   static Future<Map<String, dynamic>> addComment({
     required int userId,
     required int mediaId,
     required String comment,
   }) async {
     try {
-      print('Adding comment: userId=$userId, mediaId=$mediaId, comment=$comment');
+      print('Add Comment - userId: $userId, mediaId: $mediaId, comment: $comment');
 
       final response = await http.post(
         Uri.parse('$_baseUrl/add_comments.php'),
@@ -54,19 +53,17 @@ class LikeService {
         },
       );
 
-      print('Comment response: ${response.statusCode} - ${response.body}');
+      print('Add Comment Response: ${response.statusCode} - ${response.body}');
 
       if (response.statusCode == 200) {
-        final decoded = json.decode(response.body);
-        print('Decoded comment response: $decoded');
-        return decoded;
+        return json.decode(response.body);
       }
       return {
         'status': false,
         'message': 'Server error: ${response.statusCode}',
       };
     } catch (e) {
-      print('Comment error: $e');
+      print('Add Comment Error: $e');
       return {
         'status': false,
         'message': 'Network error: $e',
@@ -74,27 +71,60 @@ class LikeService {
     }
   }
 
+  // Get Comments
   static Future<Map<String, dynamic>> getComments(int mediaId) async {
     try {
-      print('Getting comments for mediaId: $mediaId');
+      print('Get Comments - mediaId: $mediaId');
 
       final response = await http.get(
         Uri.parse('$_baseUrl/view_comments.php?media_id=$mediaId'),
       );
 
-      print('Get comments response: ${response.statusCode} - ${response.body}');
+      print('Get Comments Response: ${response.statusCode} - ${response.body}');
 
       if (response.statusCode == 200) {
-        final decoded = json.decode(response.body);
-        print('Decoded comments: $decoded');
-        return decoded;
+        return json.decode(response.body);
       }
       return {
         'status': false,
         'message': 'Server error: ${response.statusCode}',
       };
     } catch (e) {
-      print('Get comments error: $e');
+      print('Get Comments Error: $e');
+      return {
+        'status': false,
+        'message': 'Network error: $e',
+      };
+    }
+  }
+
+  // Delete Comment (Optional - if your API supports it)
+  static Future<Map<String, dynamic>> deleteComment({
+    required int commentId,
+    required int userId,
+  }) async {
+    try {
+      print('Delete Comment - commentId: $commentId, userId: $userId');
+
+      final response = await http.post(
+        Uri.parse('$_baseUrl/delete_comment.php'), // Update with your API endpoint
+        body: {
+          'comment_id': commentId.toString(),
+          'user_id': userId.toString(),
+        },
+      );
+
+      print('Delete Comment Response: ${response.statusCode} - ${response.body}');
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      }
+      return {
+        'status': false,
+        'message': 'Server error: ${response.statusCode}',
+      };
+    } catch (e) {
+      print('Delete Comment Error: $e');
       return {
         'status': false,
         'message': 'Network error: $e',
